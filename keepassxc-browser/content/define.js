@@ -123,7 +123,7 @@ kpxcDefine.initDescription = function() {
             args: [ kpxc.settings ]
         });
 
-        $('#kpxcDefine-btn-dismiss').click();
+        kpxcDefine.close();
     };
 
     description.append(buttonConfirm);
