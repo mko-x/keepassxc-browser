@@ -52,16 +52,16 @@
         "description": "Cannot decrypt message."
     },
     "errorMessageTimeout": {
-        "message": "Timeout or not connected to KeePassXC.",
-        "description": "Timeout or not connected to KeePassXC."
+        "message": "Cannot connect to KeePassXC. Check that browser integration is enabled in KeePassXC settings.",
+        "description": "Cannot connect to KeePassXC. Check that browser integration is enabled in KeePassXC settings."
     },
     "errorMessageCanceled": {
         "message": "Action canceled or denied.",
         "description": "Action canceled or denied."
     },
     "errorMessageEncrypt": {
-        "message": "Cannot encrypt message or public key not found. Is native messaging or support for your browser enabled in KeePassXC?",
-        "description": "Cannot encrypt message or public key not found. Is native messaging or support for your browser enabled in KeePassXC?"
+        "message": "Message encryption failed. Is KeePassXC running?",
+        "description": "Message encryption failed. Is KeePassXC running?"
     },
     "errorMessageAssociate": {
         "message": "KeePassXC association failed, try again.",
@@ -326,6 +326,10 @@
     "popupRememberChooseCredentials": {
         "message": "Please choose the credentials you want to update.",
         "description": "A popup message shown choosing what credentials user wants to update."
+    },
+    "popupRememberChooseGroup": {
+        "message": "Please choose the group you want to add the new credentials.",
+        "description": "A popup message shown choosing what group user wants to use for new credentials."
     },
     "popupLoginText": {
         "message": "Select the login information you would like to get entered into the page.",

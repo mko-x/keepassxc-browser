@@ -82,11 +82,11 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 browser.runtime.onMessage.addListener(kpxcEvent.onMessage);
 
 const contextMenuItems = [
-    {title: tr('contextMenuFillUsernameAndPassword'), action: 'fill_user_pass'},
-    {title: tr('contextMenuFillPassword'), action: 'fill_pass_only'},
-    {title: tr('contextMenuFillTOTP'), action: 'fill_totp'},
-    {title: tr('contextMenuShowPasswordGeneratorIcons'), action: 'activate_password_generator'},
-    {title: tr('contextMenuSaveCredentials'), action: 'remember_credentials'}
+    { title: tr('contextMenuFillUsernameAndPassword'), action: 'fill_username_password' },
+    { title: tr('contextMenuFillPassword'), action: 'fill_password' },
+    { title: tr('contextMenuFillTOTP'), action: 'fill_totp' },
+    { title: tr('contextMenuShowPasswordGeneratorIcons'), action: 'activate_password_generator' },
+    { title: tr('contextMenuSaveCredentials'), action: 'remember_credentials' }
 ];
 
 const menuContexts = [ 'editable' ];
@@ -112,23 +112,23 @@ for (const item of contextMenuItems) {
 
 // Listen for keyboard shortcuts specified by user
 browser.commands.onCommand.addListener((command) => {
-    if (command === 'fill-username-password') {
+    if (command === 'fill_username_password') {
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
             if (tabs.length) {
-                browser.tabs.sendMessage(tabs[0].id, { action: 'fill_user_pass' });
+                browser.tabs.sendMessage(tabs[0].id, { action: 'fill_username_password' });
             }
         });
     }
 
-    if (command === 'fill-password') {
+    if (command === 'fill_password') {
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
             if (tabs.length) {
-                browser.tabs.sendMessage(tabs[0].id, { action: 'fill_pass_only' });
+                browser.tabs.sendMessage(tabs[0].id, { action: 'fill_password' });
             }
         });
     }
 
-    if (command === 'fill-totp') {
+    if (command === 'fill_totp') {
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
             if (tabs.length) {
                 browser.tabs.sendMessage(tabs[0].id, { action: 'fill_totp' });

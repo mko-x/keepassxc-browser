@@ -34,7 +34,8 @@ const kpActions = {
     CHANGE_PUBLIC_KEYS: 'change-public-keys',
     LOCK_DATABASE: 'lock-database',
     DATABASE_LOCKED: 'database-locked',
-    DATABASE_UNLOCKED: 'database-unlocked'
+    DATABASE_UNLOCKED: 'database-unlocked',
+    GET_DATABASE_GROUPS: 'get-database-groups'
 };
 
 const kpErrors = {
@@ -79,11 +80,9 @@ const kpErrors = {
     }
 };
 
-browser.storage.local.get({
-    'latestKeePassXC': { 'version': '', 'lastChecked': null },
-    'keyRing': {}}).then((item) => {
-        keepass.latestKeePassXC = item.latestKeePassXC;
-        keepass.keyRing = item.keyRing;
+browser.storage.local.get({ 'latestKeePassXC': { 'version': '', 'lastChecked': null }, 'keyRing': {} }).then((item) => {
+    keepass.latestKeePassXC = item.latestKeePassXC;
+    keepass.keyRing = item.keyRing;
 });
 
 keepass.sendNativeMessage = function(request, enableTimeout = false) {
@@ -128,11 +127,11 @@ keepass.sendNativeMessage = function(request, enableTimeout = false) {
     });
 };
 
-keepass.addCredentials = function(callback, tab, username, password, url) {
-    keepass.updateCredentials(callback, tab, null, username, password, url);
+keepass.addCredentials = function(callback, tab, username, password, url, group, groupUuid) {
+    keepass.updateCredentials(callback, tab, null, username, password, url, group, groupUuid);
 };
 
-keepass.updateCredentials = function(callback, tab, entryId, username, password, url) {
+keepass.updateCredentials = function(callback, tab, entryId, username, password, url, group, groupUuid) {
     if (tab && page.tabs[tab.id]) {
         page.tabs[tab.id].errorMessage = null;
     }
@@ -160,6 +159,11 @@ keepass.updateCredentials = function(callback, tab, entryId, username, password,
 
         if (entryId) {
             messageData.uuid = entryId;
+        }
+
+        if (group && groupUuid) {
+            messageData.group = group;
+            messageData.groupUuid = groupUuid;
         }
 
         const request = {
@@ -671,6 +675,70 @@ keepass.lockDatabase = function(tab) {
             resolve(false);
         });
     });
+};
+
+keepass.getDatabaseGroups = function(callback, tab) {
+    keepass.testAssociation((taResponse) => {
+        if (!taResponse) {
+            browserAction.showDefault(null, tab);
+            callback([]);
+            return;
+        }
+
+        if (tab && page.tabs[tab.id]) {
+            page.tabs[tab.id].errorMessage = null;
+        }
+
+        if (!keepass.isConnected) {
+            callback([]);
+            return;
+        }
+
+        let groups = [];
+        const kpAction = kpActions.GET_DATABASE_GROUPS;
+        const nonce = keepass.getNonce();
+        const incrementedNonce = keepass.incrementedNonce(nonce);
+
+        const messageData = {
+            action: kpAction
+        };
+
+        const request = {
+            action: kpAction,
+            message: keepass.encrypt(messageData, nonce),
+            nonce: nonce,
+            clientID: keepass.clientID
+        };
+
+        keepass.sendNativeMessage(request).then((response) => {
+            if (response.message && response.nonce) {
+                const res = keepass.decrypt(response.message, response.nonce);
+                if (!res) {
+                    keepass.handleError(tab, kpErrors.CANNOT_DECRYPT_MESSAGE);
+                    callback([]);
+                    return;
+                }
+
+                const message = nacl.util.encodeUTF8(res);
+                const parsed = JSON.parse(message);
+
+                if (keepass.verifyResponse(parsed, incrementedNonce)) {
+                    groups = parsed.groups;
+                    keepass.updateLastUsed(keepass.databaseHash);
+                    callback(groups);
+                } else {
+                    console.log('getDatabaseGroups rejected');
+                    callback([]);
+                }
+            } else if (response.error && response.errorCode) {
+                keepass.handleError(tab, response.errorCode, response.error);
+                callback([]);
+            } else {
+                browserAction.showDefault(null, tab);
+                callback([]);
+            }
+        });
+    }, tab, false);
 };
 
 keepass.generateNewKeyPair = function() {
