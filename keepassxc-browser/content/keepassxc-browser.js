@@ -82,7 +82,9 @@ browser.runtime.onMessage.addListener(function(req, sender) {
                 kpxc.settings = response;
                 kpxc.initCredentialFields(true);
             });
-        }
+        } else if (req.action === 'show_password_generator') {
+            kpxcPassword.trigger();
+}
     }
 });
 

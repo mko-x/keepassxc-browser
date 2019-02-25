@@ -13,6 +13,7 @@ kpxcDefine.startPosX = 0;
 kpxcDefine.startPosY = 0;
 kpxcDefine.diffX = 0;
 kpxcDefine.diffY = 0;
+kpxcDefine.keyDown = null;
 
 kpxcDefine.init = function() {
     const backdrop = kpxcUI.createElement('div', 'kpxcDefine-modal-backdrop', { 'id': 'kpxcDefine-backdrop' });
@@ -27,6 +28,7 @@ kpxcDefine.init = function() {
     kpxcFields.prepareVisibleFieldsWithID('select');
 
     kpxcDefine.initDescription();
+    kpxcDefine.resetSelection();
     kpxcDefine.prepareStep1();
     kpxcDefine.markAllUsernameFields('#kpxcDefine-fields');
 
@@ -34,6 +36,14 @@ kpxcDefine.init = function() {
     kpxcDefine.dialog.onmousedown = function(e) {
         kpxcDefine.mouseDown(e);
     };
+
+    document.addEventListener('keydown', kpxcDefine.keyDown);
+};
+
+kpxcDefine.close = function() {
+    $('#kpxcDefine-backdrop').remove();
+    $('#kpxcDefine-fields').remove();
+    document.removeEventListener('keydown', kpxcDefine.keyDown);
 };
 
 kpxcDefine.mouseDown = function(e) {
@@ -51,11 +61,10 @@ kpxcDefine.initDescription = function() {
     const help = kpxcUI.createElement('div', 'kpxcDefine-chooser-help', { 'id': 'kpxcDefine-help' });
     description.append(h1);
     description.append(help);
-    
+
     const buttonDismiss = kpxcUI.createElement('button', 'kpxc-button kpxc-red-button', { 'id': 'kpxcDefine-btn-dismiss' }, tr('defineDismiss'));
     buttonDismiss.onclick = function(e) {
-        $('#kpxcDefine-backdrop').remove();
-        $('#kpxcDefine-fields').remove();
+        kpxcDefine.close();
     };
 
     const buttonSkip = kpxcUI.createElement('button', 'kpxc-button kpxc-orange-button', { 'id': 'kpxcDefine-btn-skip' }, tr('defineSkip'));
@@ -178,8 +187,8 @@ kpxcDefine.isFieldSelected = function(kpxcId) {
 };
 
 kpxcDefine.markAllUsernameFields = function(chooser) {
-    kpxcDefine.eventFieldClick = function(e) {
-        const field = e.currentTarget;
+    kpxcDefine.eventFieldClick = function(e, elem) {
+        const field = elem || e.currentTarget;
         kpxcDefine.selection.username = field.getAttribute('data-kpxc-id');
         field.classList.add('kpxcDefine-fixed-username-field');
         field.textContent = tr('username');
@@ -191,21 +200,21 @@ kpxcDefine.markAllUsernameFields = function(chooser) {
 };
 
 kpxcDefine.markAllPasswordFields = function(chooser) {
-    kpxcDefine.eventFieldClick = function(e) {
-        const field = e.currentTarget;
+    kpxcDefine.eventFieldClick = function(e, elem) {
+        const field = elem || e.currentTarget;
         kpxcDefine.selection.password = field.getAttribute('data-kpxc-id');
         field.classList.add('kpxcDefine-fixed-password-field');
         field.textContent = tr('password');
         field.onclick = null;
         kpxcDefine.prepareStep3();
-        kpxcDefine.markAllStringFields('kpxcDefine-fields');
+        kpxcDefine.markAllStringFields('#kpxcDefine-fields');
     };
     kpxcDefine.markFields(chooser, 'input[type=\'password\']');
 };
 
 kpxcDefine.markAllStringFields = function(chooser) {
-    kpxcDefine.eventFieldClick = function(e) {
-        const field = e.currentTarget;
+    kpxcDefine.eventFieldClick = function(e, elem) {
+        const field = elem || e.currentTarget;
         const value = field.getAttribute('data-kpxc-id');
         kpxcDefine.selection.fields[value] = true;
 
@@ -218,7 +227,10 @@ kpxcDefine.markAllStringFields = function(chooser) {
 };
 
 kpxcDefine.markFields = function(chooser, pattern) {
+    let index = 1;
+    let firstInput = null;
     const inputs = document.querySelectorAll(pattern);
+
     for (const i of inputs) {
         if (kpxcDefine.isFieldSelected(i.getAttribute('data-kpxc-id'))) {
             return true;
@@ -231,27 +243,42 @@ kpxcDefine.markFields = function(chooser, pattern) {
             field.style.left = rect.left + 'px';
             field.style.width = rect.width + 'px';
             field.style.height = rect.height + 'px';
+            field.textContent = (String(index) + '.');
             field.onclick = function(e) {
                 kpxcDefine.eventFieldClick(e);
             };
-            field.onhover = function() {
-                i.classList.add('kpxcDefine-fixed-hover-field');
-            }, function() {
-                i.classList.remove('kpxcDefine-fixed-hover-field');
+            field.onmouseenter = function() {
+                field.classList.add('kpxcDefine-fixed-hover-field');
+            };
+            field.onmouseleave = function() {
+                field.classList.remove('kpxcDefine-fixed-hover-field');
+            };
+            i.onfocus = function() {
+                field.classList.add('kpxcDefine-fixed-hover-field');
+            }
+            i.onblur = function() {
+                field.classList.remove('kpxcDefine-fixed-hover-field');
             };
             const elem = $(chooser);
             if (elem) {
                 elem.append(field);
+                firstInput = field;
             }
         }
+        ++index;
+    }
+
+    if (firstInput) {
+        firstInput.focus();
     }
 };
 
 kpxcDefine.prepareStep1 = function() {
     const help = $('#kpxcDefine-help');
-    help.style.marginBottom = '0px';
-    help.textContent = '';
+    help.style.marginBottom = '10px';
+    help.textContent = tr('defineKeyboardText');
 
+    removeContent('div#kpxcDefine-fixed-field');
     $('#kpxcDefine-chooser-headline').textContent = tr('defineChooseUsername');
     kpxcDefine.dataStep = 1;
     $('#kpxcDefine-btn-skip').style.display = 'inline-block';
@@ -261,9 +288,10 @@ kpxcDefine.prepareStep1 = function() {
 
 kpxcDefine.prepareStep2 = function() {
     const help = $('#kpxcDefine-help');
-    help.style.marginBottom = '0px';
-    help.textContent = '';
+    help.style.marginBottom = '10px';
+    help.textContent = tr('defineKeyboardText');
 
+    removeContent('div.kpxcDefine-fixed-field:not(.kpxcDefine-fixed-username-field)');
     $('#kpxcDefine-chooser-headline').textContent = tr('defineChoosePassword');
     kpxcDefine.dataStep = 2;
     $('#kpxcDefine-btn-again').style.display = 'inline-block';
@@ -272,9 +300,36 @@ kpxcDefine.prepareStep2 = function() {
 kpxcDefine.prepareStep3 = function() {
     $('#kpxcDefine-help').style.marginBottom = '10px';
     $('#kpxcDefine-help').textContent = tr('defineHelpText');
+
+    removeContent('div.kpxcDefine-fixed-field:not(.kpxcDefine-fixed-username-field):not(.kpxcDefine-fixed-password-field)');
     $('#kpxcDefine-chooser-headline').textContent = tr('defineConfirmSelection');
     kpxcDefine.dataStep = 3;
     $('#kpxcDefine-btn-skip').style.display = 'none';
     $('#kpxcDefine-btn-again').style.display = 'inline-block';
     $('#kpxcDefine-btn-confirm').style.display = 'inline-block';
+};
+
+// Handle the keyboard events
+kpxcDefine.keyDown = function(e) {
+    if (e.key === 'Escape') {
+        kpxcDefine.close();
+    } else if (e.key === 'Enter') {
+        e.preventDefault();
+    } else if (e.keyCode >= 49 && e.keyCode <= 57) {
+        // Select input field by number
+        e.preventDefault();
+        const index = e.keyCode - 48;
+        const inputFields = document.querySelectorAll('div.kpxcDefine-fixed-field:not(.kpxcDefine-fixed-username-field):not(.kpxcDefine-fixed-password-field)');
+
+        if (inputFields.length >= index) {
+            kpxcDefine.eventFieldClick(e, inputFields[index - 1]);
+        }
+    }
+};
+
+const removeContent = function(pattern) {
+    const elems = document.querySelectorAll(pattern);
+    for (const e of elems) {
+        e.remove();
+    }
 };

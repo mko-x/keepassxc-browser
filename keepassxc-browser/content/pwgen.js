@@ -28,7 +28,7 @@ kpxcPassword.observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
         const rect = DOMRectToArray(entry.boundingClientRect);
 
-        if ((entry.intersectionRatio === 0 && !entry.isIntersecting) ||  (rect.some(x => x < -10))) {
+        if ((entry.intersectionRatio === 0 && !entry.isIntersecting) || (rect.some(x => x < -10))) {
             kpxcPassword.icon.style.display = 'none';
         } else if (entry.intersectionRatio > 0 && entry.isIntersecting) {
             kpxcPassword.icon.style.display = 'block';
@@ -100,32 +100,7 @@ kpxcPassword.createIcon = function(field) {
 
     icon.addEventListener('click', function(e) {
         e.preventDefault();
-
-        if (!kpxcFields.isVisible(field)) {
-            document.body.removeChild(icon);
-            field.removeAttribute('kpxc-password-generator');
-            return;
-        }
-
-        kpxcPassword.createDialog();
-        kpxcPassword.openDialog();
-
-        // Adjust the dialog location
-        if (kpxcPassword.dialog) {
-            kpxcPassword.dialog.style.top = String(icon.offsetTop + icon.offsetHeight) + 'px';
-            kpxcPassword.dialog.style.left = icon.style.left;
-
-            kpxcPassword.dialog.setAttribute('kpxc-pwgen-field-id', field.getAttribute('data-kpxc-id'));
-            kpxcPassword.dialog.setAttribute('kpxc-pwgen-next-field-id', field.getAttribute('kpxc-pwgen-next-field-id'));
-            kpxcPassword.dialog.setAttribute('kpxc-pwgen-next-is-password-field', field.getAttribute('kpxc-pwgen-next-is-password-field'));
-
-            const fieldExists = Boolean(field.getAttribute('kpxc-pwgen-next-field-exists'));
-            const checkbox = $('.kpxc-pwgen-checkbox');
-            if (checkbox) {
-                checkbox.setAttribute('checked', fieldExists);
-                checkbox.setAttribute('disabled', !fieldExists);
-            }
-        }
+        kpxcPassword.showDialog(field, icon);
     });
 
     kpxcPassword.setIconPosition(icon, field);
@@ -163,7 +138,7 @@ kpxcPassword.createDialog = function() {
     titleBar.append(closeButton);
 
     const passwordRow = kpxcUI.createElement('div', 'kpxc-pwgen-password-row');
-    const input = kpxcUI.createElement('input', 'kpxc-pwgen-input', { 'placeholder': tr('passwordGeneratorPlaceholder'), 'type': 'text' });
+    const input = kpxcUI.createElement('input', 'kpxc-pwgen-input', { 'placeholder': tr('passwordGeneratorPlaceholder'), 'type': 'text', 'tabindex': '-1' });
     const inputLabel = kpxcUI.createElement('label', 'kpxc-pwgen-bits', {}, tr('passwordGeneratorBits', '???'));
     passwordRow.append(input);
     passwordRow.append(inputLabel);
@@ -231,6 +206,38 @@ kpxcPassword.openDialog = function() {
         kpxcPassword.dialog.style.display = 'block';
     } else {
         kpxcPassword.dialog.style.display = 'none';
+    }
+};
+
+kpxcPassword.trigger = function() {
+    kpxcPassword.showDialog(kpxcPassword.inputField, kpxcPassword.icon);
+};
+
+kpxcPassword.showDialog = function(field, icon) {
+    if (!kpxcFields.isVisible(field)) {
+        document.body.removeChild(icon);
+        field.removeAttribute('kpxc-password-generator');
+        return;
+    }
+
+    kpxcPassword.createDialog();
+    kpxcPassword.openDialog();
+
+    // Adjust the dialog location
+    if (kpxcPassword.dialog) {
+        kpxcPassword.dialog.style.top = String(icon.offsetTop + icon.offsetHeight) + 'px';
+        kpxcPassword.dialog.style.left = icon.style.left;
+
+        kpxcPassword.dialog.setAttribute('kpxc-pwgen-field-id', field.getAttribute('data-kpxc-id'));
+        kpxcPassword.dialog.setAttribute('kpxc-pwgen-next-field-id', field.getAttribute('kpxc-pwgen-next-field-id'));
+        kpxcPassword.dialog.setAttribute('kpxc-pwgen-next-is-password-field', field.getAttribute('kpxc-pwgen-next-is-password-field'));
+
+        const fieldExists = Boolean(field.getAttribute('kpxc-pwgen-next-field-exists'));
+        const checkbox = $('.kpxc-pwgen-checkbox');
+        if (checkbox) {
+            checkbox.setAttribute('checked', fieldExists);
+            checkbox.setAttribute('disabled', !fieldExists);
+        }
     }
 };
 

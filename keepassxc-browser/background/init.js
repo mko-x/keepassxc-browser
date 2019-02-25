@@ -86,7 +86,8 @@ const contextMenuItems = [
     { title: tr('contextMenuFillPassword'), action: 'fill_password' },
     { title: tr('contextMenuFillTOTP'), action: 'fill_totp' },
     { title: tr('contextMenuShowPasswordGeneratorIcons'), action: 'activate_password_generator' },
-    { title: tr('contextMenuSaveCredentials'), action: 'remember_credentials' }
+    { title: tr('contextMenuSaveCredentials'), action: 'remember_credentials' },
+    { title: tr('contextMenuShowPasswordGenerator'), action: 'show_password_generator' }
 ];
 
 const menuContexts = [ 'editable' ];
@@ -112,26 +113,10 @@ for (const item of contextMenuItems) {
 
 // Listen for keyboard shortcuts specified by user
 browser.commands.onCommand.addListener((command) => {
-    if (command === 'fill_username_password') {
+    if (contextMenuItems.some(e => e.action === command)) {
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
             if (tabs.length) {
-                browser.tabs.sendMessage(tabs[0].id, { action: 'fill_username_password' });
-            }
-        });
-    }
-
-    if (command === 'fill_password') {
-        browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-            if (tabs.length) {
-                browser.tabs.sendMessage(tabs[0].id, { action: 'fill_password' });
-            }
-        });
-    }
-
-    if (command === 'fill_totp') {
-        browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-            if (tabs.length) {
-                browser.tabs.sendMessage(tabs[0].id, { action: 'fill_totp' });
+                browser.tabs.sendMessage(tabs[0].id, { action: command });
             }
         });
     }
