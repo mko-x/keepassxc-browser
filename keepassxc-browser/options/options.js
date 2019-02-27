@@ -25,7 +25,7 @@ $(function() {
     });
 
     // Set options page language to HTML element from locale
-    document.documentElement.setAttribute('lang', browser.i18n.getUILanguage());
+    $('html').attr('lang', browser.i18n.getUILanguage());
 });
 
 var options = options || {};
@@ -57,7 +57,9 @@ options.saveSettingsPromise = function() {
 options.saveSetting = function(name) {
     const id = '#' + name;
     $(id).closest('.control-group').removeClass('error').addClass('success');
-    setTimeout(() => { $(id).closest('.control-group').removeClass('success'); }, 2500);
+    setTimeout(() => {
+        $(id).closest('.control-group').removeClass('success');
+    }, 2500);
 
     browser.storage.local.set({ 'settings': options.settings });
     browser.runtime.sendMessage({
@@ -87,12 +89,9 @@ options.initGeneralSettings = function() {
     $('#tab-general-settings input[type=checkbox]').change(function() {
         const name = $(this).attr('name');
         options.settings[name] = $(this).is(':checked');
-        options.saveSettingsPromise().then((updated) => {
+        options.saveSettingsPromise().then((x) => {
             if (name === 'autoFillAndSend') {
-                browser.runtime.sendMessage({action: 'init_http_auth'});
-            } else if (name == 'automaticReconnect') {
-                const message = updated.automaticReconnect ? 'enable_automatic_reconnect' : 'disable_automatic_reconnect';
-                browser.runtime.sendMessage({ action: message });
+                browser.runtime.sendMessage({ action: 'init_http_auth' });
             }
         });
     });
@@ -127,7 +126,9 @@ options.initGeneralSettings = function() {
     browser.commands.getAll().then(function(commands) {
         commands.forEach(function(command) {
             var shortcut = document.getElementById(`${command.name}-shortcut`);
-            if (!shortcut) return;
+            if (!shortcut) {
+                return;
+            }
             shortcut.textContent = command.shortcut || 'not configured';
         });
     });
@@ -139,7 +140,12 @@ options.initGeneralSettings = function() {
     });
 
     $('#blinkTimeoutButton').click(function() {
-        const blinkTimeout = $.trim($('#blinkTimeout').val());
+        const input = document.querySelector('#blinkTimeout');
+        if (!input.validity.valid) {
+            options.createWarning(input, tr('optionsErrorInvalidValue'));
+        }
+
+        const blinkTimeout = input.value;
         const blinkTimeoutval = blinkTimeout !== '' ? Number(blinkTimeout) : defaultSettings.blinkTimeout;
 
         options.settings['blinkTimeout'] = blinkTimeoutval;
@@ -188,6 +194,9 @@ options.initConnectedDatabases = function() {
         $('#dialogDeleteConnectedDatabase').data('hash', $(this).closest('tr').data('hash'));
         $('#dialogDeleteConnectedDatabase .modal-body:first span:first').text($(this).closest('tr').children('td:first').text());
         $('#dialogDeleteConnectedDatabase').modal('show');
+        $('#dialogDeleteConnectedDatabase').on('shown.bs.modal', () => {
+            $('#dialogDeleteConnectedDatabase').find('[autofocus]').focus();
+        });
     });
 
     $('#dialogDeleteConnectedDatabase .modal-footer:first button.yes:first').click(function(e) {
@@ -210,7 +219,7 @@ options.initConnectedDatabases = function() {
 
     const trClone = $('#tab-connected-databases table tr.clone:first').clone(true);
     trClone.removeClass('clone');
-    for (const hash in options.keyRing) {
+    for (let hash in options.keyRing) {
         const tr = trClone.clone(true);
         tr.data('hash', hash);
         tr.attr('id', 'tr-cd-' + hash);
@@ -247,6 +256,9 @@ options.initCustomCredentialFields = function() {
         $('#dialogDeleteCustomCredentialFields').data('tr-id', $(this).closest('tr').attr('id'));
         $('#dialogDeleteCustomCredentialFields .modal-body:first strong:first').text($(this).closest('tr').children('td:first').text());
         $('#dialogDeleteCustomCredentialFields').modal('show');
+        $('#dialogDeleteCustomCredentialFields').on('shown.bs.modal', () => {
+            $('#dialogDeleteCustomCredentialFields').find('[autofocus]').focus();
+        });
     });
 
     $('#dialogDeleteCustomCredentialFields .modal-footer:first button.yes:first').click(function(e) {
@@ -294,6 +306,9 @@ options.initSitePreferences = function() {
         $('#dialogDeleteSite').data('tr-id', $(this).closest('tr').attr('id'));
         $('#dialogDeleteSite .modal-body:first strong:first').text($(this).closest('tr').children('td:first').text());
         $('#dialogDeleteSite').modal('show');
+        $('#dialogDeleteSite').on('shown.bs.modal', () => {
+            $('#dialogDeleteSite').find('[autofocus]').focus();
+        });
     });
 
     $('#tab-site-preferences tr.clone:first input[type=checkbox]:first').change(function() {
@@ -317,15 +332,37 @@ options.initSitePreferences = function() {
     });
 
     $('#manualUrl').keyup(function(event) {
-        if (event.keyCode === 13) {
+        if (event.key === 'Enter') {
             $('#sitePreferencesManualAdd').click();
         }
     });
 
     $('#sitePreferencesManualAdd').click(function(e) {
-        e.preventDefault();
-        let value = $('#manualUrl').val();
+        const manualUrl = document.querySelector('#manualUrl');
+        if (!manualUrl) {
+            return;
+        }
+
+        // Show error for invalid input
+        if (!manualUrl.validity.valid) {
+            options.createWarning(manualUrl, tr('optionsErrorInvalidURL'));
+            return;
+        }
+
+        const errorMessage = tr('optionsErrorValueExists');
+        let value = manualUrl.value;
         if (value.length > 10 && value.length <= 2000) {
+            // Fills the last / char if needed. This ensures the compatibility with Match Patterns
+            if (slashNeededForUrl(value)) {
+                value += '/';
+            }
+
+            // Check if the URL is already in the list
+            if (options.settings['sitePreferences'].some(s => s.url === value)) {
+                options.createWarning(manualUrl, errorMessage);
+                return;
+            }
+
             if (options.settings['sitePreferences'] === undefined) {
                 options.settings['sitePreferences'] = [];
             }
@@ -333,11 +370,6 @@ options.initSitePreferences = function() {
             const newValue = options.settings['sitePreferences'].length + 1;
             const trClone = $('#tab-site-preferences table tr.clone:first').clone(true);
             trClone.removeClass('clone');
-
-            // Fills the last / char if needed. This ensures the compatibility with Match Patterns
-            if (slashNeededForUrl(value)) {
-                value += '/';
-            }
 
             const tr = trClone.clone(true);
             tr.data('url', value);
@@ -349,8 +381,7 @@ options.initSitePreferences = function() {
 
             options.settings['sitePreferences'].push({ url: value, ignore: IGNORE_NOTHING, usernameOnly: false });
             options.saveSettings();
-
-            $('#manualUrl').val('');
+            manualUrl.value = '';
         }
     });
 
@@ -379,7 +410,7 @@ options.initSitePreferences = function() {
     trClone.removeClass('clone');
     let counter = 1;
     if (options.settings['sitePreferences']) {
-        for (const site of options.settings['sitePreferences']) {
+        for (let site of options.settings['sitePreferences']) {
             const tr = trClone.clone(true);
             tr.data('url', site.url);
             tr.attr('id', 'tr-scf' + counter);
@@ -410,6 +441,23 @@ options.initAbout = function() {
     if (isFirefox() && Number(navigator.userAgent.substr(navigator.userAgent.lastIndexOf('/') + 1, 2)) < 60) {
         $('#chrome-only').remove();
     }
+};
+
+options.createWarning = function(elem, text) {
+    const banner = document.createElement('div');
+    banner.classList.add('alert', 'alert-dismissible', 'alert-danger', 'fade', 'in');
+    banner.style.position = 'absolute';
+    banner.style.left = String(elem.offsetLeft) + 'px';
+    banner.style.top = String(elem.offsetTop + elem.offsetHeight) + 'px';
+    banner.style.padding = '0px';
+    banner.style.width = '300px';
+    banner.textContent = text;
+    elem.parentElement.append(banner);
+
+    // Destroy the warning after five seconds
+    setTimeout(() => {
+        elem.parentElement.removeChild(banner);
+    }, 5000);
 };
 
 const getBrowserId = function() {
