@@ -90,6 +90,7 @@ kpxcPassword.createIcon = function(field) {
     const icon = kpxcUI.createElement('div', 'kpxc kpxc-pwgen-icon ' + className,
         {
             'title': tr('passwordGeneratorGenerateText'),
+            'alt': tr('passwordGeneratorIcon'),
             'size': size,
             'offset': offset,
             'kpxc-pwgen-field-id': field.getAttribute('data-kpxc-id')
@@ -140,14 +141,12 @@ kpxcPassword.createDialog = function() {
     const passwordRow = kpxcUI.createElement('div', 'kpxc-pwgen-password-row');
     const input = kpxcUI.createElement('input', 'kpxc-pwgen-input', { 'placeholder': tr('passwordGeneratorPlaceholder'), 'type': 'text', 'tabindex': '-1' });
     const inputLabel = kpxcUI.createElement('label', 'kpxc-pwgen-bits', {}, tr('passwordGeneratorBits', '???'));
-    passwordRow.append(input);
-    passwordRow.append(inputLabel);
+    passwordRow.appendMultiple(input, inputLabel);
 
     const nextFillRow = kpxcUI.createElement('div', 'kpxc-pwgen-nextfill-row');
     const checkbox = kpxcUI.createElement('input', 'kpxc-pwgen-checkbox', { 'type': 'checkbox' });
     const checkboxLabel = kpxcUI.createElement('label', 'kpxc-pwgen-checkbox-label', { 'for': 'kpxc-pwgen-checkbox' }, tr('passwordGeneratorLabel'));
-    nextFillRow.append(checkbox);
-    nextFillRow.append(checkboxLabel);
+    nextFillRow.appendMultiple(checkbox, checkboxLabel);
 
     // Buttons
     const buttonsRow = kpxcUI.createElement('div', 'kpxc-pwgen-buttons');
@@ -167,14 +166,8 @@ kpxcPassword.createDialog = function() {
         kpxcPassword.fill(e);
     };
 
-    buttonsRow.append(generateButton);
-    buttonsRow.append(copyButton);
-    buttonsRow.append(fillButton);
-
-    dialog.append(titleBar);
-    dialog.append(passwordRow);
-    dialog.append(nextFillRow);
-    dialog.append(buttonsRow);
+    buttonsRow.appendMultiple(generateButton, copyButton, fillButton);
+    dialog.appendMultiple(titleBar, passwordRow, nextFillRow, buttonsRow);
     wrapper.append(dialog);
 
     const icon = $('.kpxc-pwgen-icon');

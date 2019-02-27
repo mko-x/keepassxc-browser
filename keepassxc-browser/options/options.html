@@ -10,19 +10,19 @@
       <script src="../jquery-3.3.1.min.js"></script>
       <script src="bootstrap.min.js"></script>
       <script src="options.js"></script>
-      <script defer src="../translate.js"></script>
+      <script src="../translate.js" defer></script>
   </head>
   <body>
     <div class="container">
-      <h3 class="muted"><img src="/icons/keepassxc_48x48.png" alt="logo" /> KeePassXC-Browser</h3>
+      <h3 class="muted"><img src="/icons/keepassxc_48x48.png" alt="logo"> KeePassXC-Browser</h3>
 
       <nav class="navbar navbar-default">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#general-settings"><span data-i18n="optionsMenuGeneral"></span></a></li>
-          <li><a href="#connected-databases"><span data-i18n="optionsMenuConnectedDatabases"></span></a></li>
-          <li><a href="#custom-fields"><span data-i18n="optionsMenuCustomFields"></span></a></li>
-          <li><a href="#site-preferences"><span data-i18n="optionsMenuSitePreferences"></span></a></li>
-          <li><a href="#about"><span data-i18n="optionsMenuAbout"></span></a></li>
+          <li class="active"><a href="#general-settings" tabindex="1"><span data-i18n="optionsMenuGeneral"></span></a></li>
+          <li><a href="#connected-databases" tabindex="2"><span data-i18n="optionsMenuConnectedDatabases"></span></a></li>
+          <li><a href="#custom-fields" tabindex="3"><span data-i18n="optionsMenuCustomFields"></span></a></li>
+          <li><a href="#site-preferences" tabindex="4"><span data-i18n="optionsMenuSitePreferences"></span></a></li>
+          <li><a href="#about" tabindex="5"><span data-i18n="optionsMenuAbout"></span></a></li>
         </ul>
       </nav>
 
@@ -36,14 +36,14 @@
           <span data-i18n="contextMenuFillPassword"></span>: <span id="fill-password-shortcut">error</span><br />
           <span data-i18n="contextMenuFillTOTP"></span>: <span id="fill-totp-shortcut">error</span>
         </p>
-        <p id="chrome-only"><button class="btn btn-sm btn-primary" id="configureCommands" type="button"><span class="glyphicon glyphicon-cog"></span><span data-i18n="optionsConfigureShortcuts"/></button></p>
+        <p id="chrome-only"><button class="btn btn-sm btn-primary" id="configureCommands" type="button" data-i18n="[title]openNewTab"><span class="glyphicon glyphicon-cog"></span><span data-i18n="optionsConfigureShortcuts"></span></button></p>
         <p>
           <div class="form-group">
             <label for="blinkTimeout" data-i18n="optionsLabelBlinkTime"></label>
             <div class="control-group">
               <div class="input-append">
                 <input type="number" id="blinkTimeout" placeholder="7500" value="7500" min="-1"/>
-                <button class="btn btn-sm btn-primary" id="blinkTimeoutButton" type="button"><span class="glyphicon glyphicon-floppy-disk"></span> <span data-i18n="optionsButtonSave"/></button>
+                <button class="btn btn-sm btn-primary" id="blinkTimeoutButton" type="button"><span class="glyphicon glyphicon-floppy-disk"></span> <span data-i18n="optionsButtonSave"></span></button>
               </div>
             </div>
             <span class="help-inline">
@@ -59,7 +59,7 @@
             <div class="control-group">
               <div class="input-append">
                 <input type="number" id="blinkMinTimeout" placeholder="2000" value="2000" min="-1"/>
-                <button class="btn btn-sm btn-primary" id="blinkMinTimeoutButton" type="button"><span class="glyphicon glyphicon-floppy-disk"></span> <span data-i18n="optionsButtonSave"/></button>
+                <button class="btn btn-sm btn-primary" id="blinkMinTimeoutButton" type="button"><span class="glyphicon glyphicon-floppy-disk"></span> <span data-i18n="optionsButtonSave"></span></button>
               </div>
             </div>
             <span class="help-inline">
@@ -77,7 +77,7 @@
             <div class="control-group">
               <div class="input-append">
                 <input type="number" id="allowedRedirect" placeholder="1" value="1" min="1"/>
-                <button class="btn btn-sm btn-primary" id="allowedRedirectButton" type="button"><span class="glyphicon glyphicon-floppy-disk"></span> <span data-i18n="optionsButtonSave"/></button>
+                <button class="btn btn-sm btn-primary" id="allowedRedirectButton" type="button"><span class="glyphicon glyphicon-floppy-disk"></span> <span data-i18n="optionsButtonSave"></span></button>
               </div>
             </div>
             <span class="help-inline">
@@ -112,16 +112,7 @@
         <p>
           <div class="checkbox">
             <label class="checkbox">
-              <input type="checkbox" name="automaticReconnect" value="true" /><span data-i18n="optionsCheckboxAutomaticReconnect"/>
-            </label>
-            <span class="help-block" data-i18n="optionsAutomaticReconnectHelpText"></span>
-          </div>
-        </p>
-        <hr />
-        <p>
-          <div class="checkbox">
-            <label class="checkbox">
-              <input type="checkbox" name="autoFillSingleEntry" value="false" /><span data-i18n="optionsCheckboxAutoFillSingleEntry"/>
+              <input type="checkbox" name="autoFillSingleEntry" value="false" /><span data-i18n="optionsCheckboxAutoFillSingleEntry"></span>
             </label>
             <span class="help-block" data-i18n="optionsAutoFillSingleEntryHelpText"></span>
             <span class="bg-danger" data-i18n="optionsAutoFillSingleEntryWarning"></span>
@@ -162,7 +153,7 @@
         <hr />
         <p>
           <div data-i18n="optionsRadioText"></div>
-          <label class="radio-inline"><input type="radio" name="checkUpdateKeePassXC" value="3" checked="true"/><span data-i18n="optionsRadioThreeDays"></span></label>
+          <label class="radio-inline"><input type="radio" name="checkUpdateKeePassXC" value="3" checked><span data-i18n="optionsRadioThreeDays"></span></label>
           <label class="radio-inline"><input type="radio" name="checkUpdateKeePassXC" value="7" /><span data-i18n="optionsRadioWeek"></span></label>
           <label class="radio-inline"><input type="radio" name="checkUpdateKeePassXC" value="30" /><span data-i18n="optionsRadioMonth"></span></label>
           <label class="radio-inline"><input type="radio" name="checkUpdateKeePassXC" value="0" /><span data-i18n="optionsRadioNever"></span></label>
@@ -178,7 +169,7 @@
           </div>
           <div>
             <span data-i18n="optionsLatestVersion" i18n-placeholder="<em class='latestVersion'></em>"></span>
-            <button class="btn btn-sm btn-primary checkUpdateKeePassXC"><span class="glyphicon glyphicon-refresh"></span> <span data-i18n="optionsButtonUpdate"/></button>
+            <button class="btn btn-sm btn-primary checkUpdateKeePassXC"><span class="glyphicon glyphicon-refresh"></span> <span data-i18n="optionsButtonUpdate"></span></button>
           </div>
         </div>
         <hr />
@@ -193,7 +184,8 @@
               <span data-i18n="optionsAutoFillAndSendHelpTextSecond"></span>
             </span>
           </div>
-        <img src="/options/http-auth-dialog.png" alt="http-auth-dialog" />
+        <!--<img src="/options/http-auth-dialog.png" alt="http-auth-dialog" />-->
+        <img src="/options/http-auth-dialog.png" data-i18n="[alt]httpAuthDialog"/>
         </p>
       </div>
 
@@ -201,15 +193,15 @@
       <div class="tab" id="tab-connected-databases">
         <h2 data-i18n="optionsConnectedDatabasesTab"></h2>
         <hr />
-        <p data-i18n="optionsConnectedDatabasesText"></p>
         <table class="table table-striped table-bordered table-hover">
+          <caption data-i18n="optionsConnectedDatabasesText"></caption>
           <thead>
             <tr>
-              <th><span data-i18n="optionsDatabaseIdentifier"></span></th>
-              <th><span data-i18n="optionsDatabaseKey"></span></th>
-              <th><span data-i18n="optionsDatabaseLastUsed"></span></th>
-              <th><span data-i18n="optionsDatabaseCreated"></span></th>
-              <th><span data-i18n="optionsDatabaseDelete"></span></th>
+              <th scope="col"><span data-i18n="optionsDatabaseIdentifier"></span></th>
+              <th scope="col"><span data-i18n="optionsDatabaseKey"></span></th>
+              <th scope="col"><span data-i18n="optionsDatabaseLastUsed"></span></th>
+              <th scope="col"><span data-i18n="optionsDatabaseCreated"></span></th>
+              <th scope="col"><span data-i18n="optionsDatabaseDelete"></span></th>
             </tr>
           </thead>
           <tbody>
@@ -243,7 +235,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span> <span data-i18n="optionsButtonCancel"></span></button>
-                <button class="btn yes btn-primary"><span class="glyphicon glyphicon-ok"></span> <span data-i18n="optionsButtonRemoveNow"></span></button>
+                <button class="btn yes btn-primary" autofocus><span class="glyphicon glyphicon-ok"></span> <span data-i18n="optionsButtonRemoveNow"></span></button>
               </div>
             </div>
           </div>
@@ -258,14 +250,13 @@
           <span data-i18n="optionsCustomFieldsTabHelpTextFirst"></span>
           <br />
           <span data-i18n="optionsCustomFieldsTabHelpTextSecond"></span><em><span data-i18n="popupChooseCredentialsText"></span></em>.
-          <br />
-          <span data-i18n="optionsCustomFieldsTabHelpTextThird"></span>
         </p>
         <table class="table table-striped table-bordered table-hover">
+          <caption data-i18n="optionsCustomFieldsTableCaption"></caption>
           <thead>
             <tr>
-              <th><span data-i18n="optionsColumnPageURL"></span></th>
-              <th><span data-i18n="optionsColumnDelete"></span></th>
+              <th scope="col"><span data-i18n="optionsColumnPageURL"></span></th>
+              <th scope="col"><span data-i18n="optionsColumnDelete"></span></th>
             </tr>
           </thead>
           <tbody>
@@ -291,7 +282,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span> <span data-i18n="optionsButtonCancel"></span></button>
-                <button class="btn yes btn-primary"><span class="glyphicon glyphicon-ok"></span> <span data-i18n="optionsButtonRemoveNow"></span></button>
+                <button class="btn yes btn-primary" autofocus><span class="glyphicon glyphicon-ok"></span> <span data-i18n="optionsButtonRemoveNow"></span></button>
               </div>
             </div>
           </div>
@@ -313,22 +304,23 @@
         </p>
         <hr />
         <div class="form-group">
-          <label for="ignoreManualAdd" data-i18n="optionsSitePreferencesManualAddText"></label>:
-          <div class="control-group">
+          <label for="manualUrl" data-i18n="optionsSitePreferencesManualAddText"></label>
+          <div class="control-group" id="manualUrlGroup">
             <div class="input-append">
-              <input type="url" id="manualUrl"/>
+              <input type="url" id="manualUrl" pattern="ftp://.*|http://.*|https://.*" minlength="10">
               <button class="btn btn-sm btn-primary" id="sitePreferencesManualAdd" type="button"><span class="glyphicon glyphicon-plus-sign"></span> <span data-i18n="optionsButtonAdd"></span></button>
             </div>
           </div>
         </div>
         <hr />
         <table class="table table-striped table-bordered table-hover">
+          <caption data-i18n="optionsSitePreferencesTableCaption"></caption>
           <thead>
             <tr>
-              <th><span data-i18n="optionsColumnPageURL"></span></th>
-              <th><span data-i18n="optionsColumnIgnore"></span></th>
-              <th><span data-i18n="optionsColumnUsernameOnly"></span></th>
-              <th><span data-i18n="optionsColumnDelete"></span></th>
+              <th scope="col"><span data-i18n="optionsColumnPageURL"></span></th>
+              <th scope="col"><span data-i18n="optionsColumnIgnore"></span></th>
+              <th scope="col"><span data-i18n="optionsColumnUsernameOnly"></span></th>
+              <th scope="col"><span data-i18n="optionsColumnDelete"></span></th>
             </tr>
           </thead>
           <tbody>
@@ -338,13 +330,13 @@
             <tr class="clone">
               <td></td>
               <td>
-                <select name="ignore">
+                <select name="ignore" data-i18n="[title]optionsSitePreferencesSelect">
                   <option value="ignoreNothing" data-i18n="optionsSelectionNothing"></option>
                   <option value="ignoreNormal" data-i18n="optionsSelectionNormal"></option>
                   <option value="ignoreFull" data-i18n="optionsSelectionFull"></option>
                 </select>
               </td>
-              <td><input type="checkbox" name="usernameOnly" value="false" /></td>
+              <td><input type="checkbox" name="usernameOnly" value="false" data-i18n="[title]optionsColumnUsernameOnly"/></td>
               <td><button class="btn delete btn-danger btn"><span class="glyphicon glyphicon-remove-sign"></span> <span data-i18n="optionsButtonRemove"></span></button></td>
             </tr>
           </tbody>
@@ -354,7 +346,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" data-i18n="optionsIgnoredSitesRemove"></h3>
+                <h3 id="myModalLabel" data-i18n="optionsSitePreferencesRemove"></h3>
               </div>
               <div class="modal-body">
                 <p><span data-i18n="optionsSitePreferencesConfirmation" i18n-placeholder="<strong></strong>"></span></p>
@@ -362,7 +354,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span> <span data-i18n="optionsButtonCancel"></span></button>
-                <button class="btn yes btn-primary"><span class="glyphicon glyphicon-ok"></span> <span data-i18n="optionsButtonRemoveNow"></span></button>
+                <button class="btn yes btn-primary" autofocus><span class="glyphicon glyphicon-ok"></span> <span data-i18n="optionsButtonRemoveNow"></span></button>
               </div>
             </div>
           </div>
@@ -374,17 +366,17 @@
         <h2 data-i18n="optionsAboutTab"></h2>
         <hr />
         <p>
-          <a target="_blank" href="https://chrome.google.com/webstore/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk"><span data-i18n="optionsAboutChrome"></span></a>
+          <a target="_blank" href="https://chrome.google.com/webstore/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk" data-i18n="[title]openNewTab" tabindex="6"><span data-i18n="optionsAboutChrome"></span></a>
         </p>
         <p>
-          <a target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/"><span data-i18n="optionsAboutMozilla"></span></a>
+          <a target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/" data-i18n="[title]openNewTab" tabindex="7"><span data-i18n="optionsAboutMozilla"></span></a>
         </p>
         <p>
-          <a target="_blank" href="https://github.com/keepassxreboot/keepassxc-browser"><span data-i18n="optionsAboutGitHub"></span></a>.
+          <a target="_blank" href="https://github.com/keepassxreboot/keepassxc-browser" data-i18n="[title]openNewTab" tabindex="8"><span data-i18n="optionsAboutGitHub"></span></a>
         </p>
         <hr />
         <p>
-          <span data-i18n="optionsAboutExtensionVersion" i18n-placeholder="<em class='versionExtension'></em>"></span>
+          <span data-i18n="optionsAboutExtensionVersion" i18n-placeholder="<em class='versionCIP'></em>"></span>
         </p>
         <p>
           <span data-i18n="optionsAboutKeePassXCVersion" i18n-placeholder="<em class='versionKPH'></em>"></span>
@@ -392,9 +384,11 @@
         <hr />
         <p>
           <span data-i18n="optionsAboutContributors"></span>:<br>
-          <a target="_blank" href="https://github.com/pfn/">Perry Nguyen</a>, <a target="_blank" href="http://lukas-schulze.de">Lukas Schulze</a>,
-          <a target="_blank" href="https://github.com/smorks">Andy Brandt</a>, <a target="_blank" href="https://github.com/varjolintu/">Sami Vänttinen</a>,
-          <a target="_blank" href="https://github.com/keepassxreboot/keepassxc-browser">KeePassXC Team</a>.
+          <a target="_blank" href="https://github.com/pfn/" data-i18n="[title]openNewTab" tabindex="9">Perry Nguyen</a>, 
+          <a target="_blank" href="http://lukas-schulze.de" data-i18n="[title]openNewTab" tabindex="10">Lukas Schulze</a>,
+          <a target="_blank" href="https://github.com/smorks" data-i18n="[title]openNewTab" tabindex="11">Andy Brandt</a>, 
+          <a target="_blank" href="https://github.com/varjolintu/" data-i18n="[title]openNewTab" tabindex="12">Sami Vänttinen</a>,
+          <a target="_blank" href="https://github.com/keepassxreboot/keepassxc-browser" data-i18n="[title]openNewTab" tabindex="13">KeePassXC Team</a>.
         </p>
         <hr />
         <p>
@@ -555,12 +549,22 @@
             </pre>
           </details>
         </p>
+        <hr />
+        <p>
+          <span data-i18n="optionsAboutReportBugs"></span>:<br>
+          <a target="_blank" href="https://github.com/keepassxreboot/keepassxc-browser/issues/new" tabindex="14"><span data-i18n="optionsAboutCreateNewIssue"></span></a>
+          <p><span data-i18n="optionsAboutDebugInfo"></span>:
+            <p>KeePassXC - <span class="kpxcVersion"></span>
+            <br>KeePassXC-Browser - <span class="kpxcbrVersion"></span>
+            <br>Operating system: <span class="kpxcbrOS"></span>
+            <br>Browser: <span class="kpxcbrBrowser"></span>
+          </p>
+        </p>
       </div>
       <hr>
       <div class="footer">
-        <p>(C) 2017-2018 - KeePassXC Team</p>
+        <p>(C) 2017-2019 - KeePassXC Team</p>
       </div>
     </div> <!-- /container -->
-
   </body>
 </html>

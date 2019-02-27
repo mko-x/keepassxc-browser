@@ -59,3 +59,9 @@ document.onmouseup = function() {
     kpxcPassword.selected = null;
     kpxcDefine.selected = null;
 };
+
+HTMLDivElement.prototype.appendMultiple = function(...args) {
+    for (const a of args) {
+        this.append(a);
+    }
+};

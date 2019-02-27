@@ -99,6 +99,10 @@
         "message": "No logins found.",
         "description": "No logins found."
     },
+    "passwordGeneratorIcon": {
+        "message": "Password generator icon",
+        "description": "Alt attribute text of the password generator icon."
+    },
     "passwordGeneratorPlaceholder": {
         "message": "Generated password",
         "description": "Input field placeholder for generated password."
@@ -711,6 +715,10 @@
         "message": "No saved custom login fields found.",
         "description": "Shown when no saved custom credentials are saved."
     },
+    "optionsCustomFieldsTableCaption": {
+        "message": "You can manage saved custom login fields using the table below.",
+        "description": "Table caption of Custom login fields page."
+    },
     "optionsCustomFieldsTabHelpTextFirst": {
         "message": "If KeePassXC-Browser detects the wrong login fields, you are able to specify the correct fields yourself.",
         "description": "Saved custom login fields info text, first part."
@@ -771,6 +779,14 @@
         "message": "KeePassXC-Browser will enable all features for this site and remove username-only detection.",
         "description": "Part of confirmation text when removing site preferences."
     },
+    "optionsSitePreferencesTableCaption": {
+        "message": "You can manage saved site preferences using the table below.",
+        "description": "Table caption of Site Preferences page."
+    },
+    "optionsSitePreferencesSelect": {
+        "message": "Option to ignore extension features for the page.",
+        "description": "Title text of select element in Site Preferences."
+    },
     "optionsAboutChrome": {
         "message": "Visit KeePassXC-Browser in the Chrome Web Store.",
         "description": "About page link to Chrome Web Store."
@@ -799,6 +815,18 @@
         "message": "Licenses",
         "description": "About page text of licenses."
     },
+    "optionsAboutReportBugs": {
+        "message": "Report bugs",
+        "description": "About page text of reporting bugs."
+    },
+    "optionsAboutCreateNewIssue": {
+        "message": "Create new issue on GitHub",
+        "description": "Link text for creating a new issue."
+    },
+    "optionsAboutDebugInfo": {
+        "message": "The following debug info can be used",
+        "description": "Debug info text."
+    },
     "optionsErrorInvalidValue": {
         "message": "Invalid value. Please check the input.",
         "description": "Error shown when input field has an incorrect value."
@@ -810,5 +838,13 @@
     "optionsErrorValueExists": {
         "message": "The value already exists in the list.",
         "description": "Error shown when trying to add a duplicate value to the list."
+    },
+    "openNewTab": {
+        "message": "Opens a new tab",
+        "description": "Title attribute text."
+    },
+    "httpAuthDialog": {
+        "message": "HTTP Basic Authentication dialog",
+        "description": "Options page HTTP Basic Auth dialog text"
     }
 }

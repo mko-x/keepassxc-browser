@@ -60,6 +60,21 @@
     margin-bottom: 3px;
 }
 
+.kpxcDefine-keyboardHelp {
+    font-size: 0.75rem;
+}
+
+.kpxcDefine-keyboardHelp kbd {
+    background-color: #eee;
+    border-radius: 3px;
+    border: 1px solid #b4b4b4;
+    color: #333;
+    display: inline-block;
+    line-height: 1;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
+
 .kpxcDefine-fixed-field {
     position: absolute;
     border: 2px solid #efefef;
