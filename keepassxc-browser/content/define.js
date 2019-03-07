@@ -193,7 +193,7 @@ kpxcDefine.markFields = function(chooser, pattern) {
             field.style.left = rect.left + 'px';
             field.style.width = rect.width + 'px';
             field.style.height = rect.height + 'px';
-            field.textContent = (String(index) + '.');
+            field.textContent = String(index);
             field.onclick = function(e) {
                 kpxcDefine.eventFieldClick(e);
             };
@@ -213,9 +213,9 @@ kpxcDefine.markFields = function(chooser, pattern) {
             if (elem) {
                 elem.append(field);
                 firstInput = field;
+                ++index;
             }
         }
-        ++index;
     }
 
     if (firstInput) {
